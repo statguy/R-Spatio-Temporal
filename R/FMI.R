@@ -26,6 +26,8 @@ queryFMIData <- function(apiKey, queryStored, parameters) {
 # Also, query EPSG should be 4326.
 parseFMIWeatherStationMultipointCoverage <- function(fileName, proj4string=CRS("+init=epsg:4326")) {
   library(XML)
+  library(sp)
+  library(rgdal)
   
   positionsTag <- F
   weatherTag <- F
@@ -83,8 +85,6 @@ parseFMIWeatherStationMultipointCoverage <- function(fileName, proj4string=CRS("
   tmax <- as.numeric(tmax)
   tmax[is.nan(tmax)] <- NA
   
-  library(sp)
-  library(rgdal)
   weather <- SpatialPointsDataFrame(coords=cbind(x, y),
                                     data=data.frame(date=date, rrday=rrday, tday=tday, snow=snow, tmin=tmin, tmax=tmax),
                                     proj4string=CRS("+init=epsg:4326"))
