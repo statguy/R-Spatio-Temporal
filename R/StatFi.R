@@ -55,11 +55,13 @@ queryStatFiPopulationGrid <- function(year, outputFile, crs, yearsAvailable=c(20
 }
 
 # Get human population density on a 1 km x 1 km area at given points 'xy' in year 'year'
-getStatFiPopulationDensity <- function(xy, year, variable="VAESTO") {
+getStatFiPopulationDensity <- function(xy, year, variable="VAESTO", aggregationFactor=1) {
   library(raster)
   library(rgdal)
   
-  populationGrid <- queryStatFiPopulationGrid(year)
+  populationGrid <- queryStatFiPopulationGrid(year)  
+  if (aggregationFactor > 1)
+    populationGrid <- aggregate(populationGrid, fact=aggregationFactor, fun=sum, na.rm=TRUE)
   xy.trans <- spTransform(xy, CRS(proj4string(populationGrid)))
   population <- extract(populationGrid[[variable]], xy.trans)
   
