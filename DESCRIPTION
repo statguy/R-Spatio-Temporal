@@ -1,0 +1,9 @@
+Package: ST
+Type: Package
+Title: Tools for manipulating and presenting spatio-temporal data. Tools to query and process spatio-temporal open access data.
+Version: 1.0
+Date: 2014-02-24
+Author: Jussi Jousimo
+Maintainer: Jussi Jousimo <jvj@iki.fi>
+Description: Tools for manipulating and presenting spatio-temporal data. Tools to query and process weather station data from Finnish Meteorological Institute and human population density data from Statistics Finland.
+License: MIT
