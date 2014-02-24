@@ -15,13 +15,12 @@
 # Lataa Suomen väestömäärän 1 km x 1 km -ruudukkona Tilastokeskuksesta.
 # Lisätietoja: http://www.paikkatietohakemisto.fi/catalogue/ui/metadata.html?lang=fi&metadataresourceuuid=a901d40a-8a6b-4678-814c-79d2e2ab130c
 
-queryStatFiPopulationGrid <- function(year, outputFile, crs) {
+queryStatFiPopulationGrid <- function(year, outputFile, crs, yearsAvailable=c(2005,2010:2012)) { # Needs to be updated when more years become available
   library(sp)
   library(rgdal)
   library(raster)
   
   # Find data for the closest available year
-  yearsAvailable <- c(2005, 2010, 2011, 2012) # Needs to be updated when more years become available
   diff <- abs(year - yearsAvailable)
   closestYear <- yearsAvailable[which.min(diff)]
   if (!any(diff == 0))
@@ -57,6 +56,9 @@ queryStatFiPopulationGrid <- function(year, outputFile, crs) {
 
 # Get human population density on a 1 km x 1 km area at given points 'xy' in year 'year'
 getStatFiPopulationDensity <- function(xy, year, variable="VAESTO") {
+  library(raster)
+  library(rgdal)
+  
   populationGrid <- queryStatFiPopulationGrid(year)
   xy.trans <- spTransform(xy, CRS(proj4string(populationGrid)))
   population <- extract(populationGrid[[variable]], xy.trans)
