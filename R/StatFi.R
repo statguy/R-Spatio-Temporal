@@ -30,7 +30,7 @@ queryStatFiPopulationGrid <- function(year, outputFile, crs) {
   # Download the shapefile
   query <- paste("http://www.stat.fi/tup/rajapintapalvelut/vaki", closestYear, "_1km.zip", sep="")
   baseDir <- tempdir()
-  fileName <- file.path(baseDir, paste("statfi", year, sep=""))
+  fileName <- file.path(baseDir, paste("statfi", closestYear, sep=""))
   
   # Cache files for each year
   if (!file.exists(fileName)) {
