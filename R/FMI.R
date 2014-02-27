@@ -88,7 +88,7 @@ parseFMIWeatherStationMultipointCoverage <- function(fileName, proj4string=CRS("
   weather <- SpatialPointsDataFrame(coords=cbind(x, y),
                                     data=data.frame(date=date, rrday=rrday, tday=tday, snow=snow, tmin=tmin, tmax=tmax),
                                     proj4string=CRS("+init=epsg:4326"))
-  weather <- spTransform(weather, proj4string=proj4string)
+  weather <- spTransform(weather, proj4string)
   
   return(weather)
 }
