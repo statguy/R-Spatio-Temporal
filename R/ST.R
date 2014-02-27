@@ -32,3 +32,4 @@ multiRasterInterpolate <- function(xyz, variables, templateRaster, transform=ide
   
   return(stack(rasterList))
 }
+

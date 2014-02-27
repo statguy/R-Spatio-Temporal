@@ -55,15 +55,20 @@ queryStatFiPopulationGrid <- function(year, outputFile, crs, yearsAvailable=c(20
 }
 
 # Get human population density on a 1 km x 1 km area at given points 'xy' in year 'year'
-getStatFiPopulationDensity <- function(xy, year, variable="VAESTO", aggregationFactor=1) {
+getStatFiPopulationDensityRaster <- function(year, variable="VAESTO", aggregationFactor=1) {
   library(raster)
-  library(rgdal)
   
   populationGrid <- queryStatFiPopulationGrid(year)  
   if (aggregationFactor > 1)
     populationGrid <- aggregate(populationGrid, fact=aggregationFactor, fun=sum, na.rm=TRUE)
-  xy.trans <- spTransform(xy, CRS(proj4string(populationGrid)))
-  population <- extract(populationGrid[[variable]], xy.trans)
+  return(populationGrid[[variable]])
+}
+
+getStatFiPopulationDensity <- function(xy, populationRaster) {
+  library(rgdal)
+    
+  xy.trans <- spTransform(xy, CRS(proj4string(populationRaster)))
+  population <- extract(populationRaster, xy.trans)
   
   # As zero population cells are marked with NA, set them zero.
   # Does not check if the coordinates are outside Finland where it would be more appropriate to return NA.
