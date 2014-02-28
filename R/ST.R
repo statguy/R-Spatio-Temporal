@@ -30,6 +30,6 @@ multiRasterInterpolate <- function(xyz, variables, templateRaster, transform=ide
     return(resultRaster)
   }, templateRaster=templateRaster, transform=transform, inverseTransform=inverseTransform, .parallel=F)
   
-  return(brick(rasterList))
+  return(stack(rasterList))
 }
 
