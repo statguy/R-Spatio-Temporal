@@ -20,15 +20,15 @@ rasterInterpolate <- function(xyz, templateRaster, transform=identity, inverseTr
 }
 
 # Interpolates a set spatial points to a set of raster objects.
-multiRasterInterpolate <- function(xyz, variables, templateRaster, transform=identity, inverseTransform=identity) {
+multiRasterInterpolate <- function(xyzt, variables, templateRaster, transform=identity, inverseTransform=identity) {
   library(plyr)
   library(raster)
   
-  rasterList <- dlply(.data=xyz, .variables=variables, .fun=function(xyz, templateRaster, transform, inverseTransform) {
+  rasterList <- dlply(.data=xyzt, .variables=variables, .fun=function(xyz, templateRaster, transform, inverseTransform) {
     xyz <- xyz[complete.cases(xyz),]
-    resultRaster <- rasterInterpolate(xyz, templateRaster, transform, inverseTransform)
+    resultRaster <- rasterInterpolate(xyz=xyz, templateRaster=templateRaster, transform=transform, inverseTransform=inverseTransform)
     return(resultRaster)
-  }, templateRaster=templateRaster, transform=transform, inverseTransform=inverseTransform, .parallel=F)
+  }, templateRaster=templateRaster, transform=transform, inverseTransform=inverseTransform, .parallel=TRUE)
   
   return(stack(rasterList))
 }
