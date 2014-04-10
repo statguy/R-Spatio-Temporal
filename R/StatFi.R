@@ -78,7 +78,7 @@ getStatFiPopulationDensity <- function(xy, populationRaster) {
   library(raster)
     
   xy.trans <- spTransform(xy, CRS(proj4string(populationRaster)))
-  population <- extract(populationRaster, xy.trans)
+  population <- raster::extract(populationRaster, xy.trans)
   
   # As zero population cells are marked with NA, set them zero.
   # Does not check if the coordinates are outside Finland where it would be more appropriate to return NA.
