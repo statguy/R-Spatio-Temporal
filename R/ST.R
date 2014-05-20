@@ -7,14 +7,17 @@ rasterInterpolate <- function(xyz, templateRaster, transform=identity, inverseTr
   library(fields)
   library(raster)
   
-  message("Interpolating data, minmax = ", min(xyz[,3], na.rm=T), " ", max(xyz[,3], na.rm=T), "...")
+  if (missing(xyz)) stop("xyz missing")
+  if (missing(templateRaster)) stop("templateRaster missing")
+  
+  message("Interpolating data, minmax = ", min(xyz[,3], na.rm=T), " ", max(xyz[,3], na.rm=T), ", sd = ", sd(xyz[,3], na.rm=T), "...")
   
   z <- transform(xyz[,3])
   fit <- Tps(xyz[,1:2], z)
   predicted <- interpolate(templateRaster, fit)
   final <- calc(predicted, inverseTransform)
   
-  message("Result raster, minmax = ", cellStats(final, min), " ", cellStats(final, max))
+  message("Result raster, minmax = ", cellStats(final, min), " ", cellStats(final, max), ", sd = ", cellStats(final, sd))
   
   return(final)
 }
@@ -23,6 +26,13 @@ rasterInterpolate <- function(xyz, templateRaster, transform=identity, inverseTr
 multiRasterInterpolate <- function(xyzt, variables, templateRaster, transform=identity, inverseTransform=identity) {
   library(plyr)
   library(raster)
+  
+  if (missing(xyzt)) stop("xyzt missing")
+  if (missing(variables)) stop("variables missing")  
+  if (missing(templateRaster)) stop("templateRaster missing")
+  
+  message("Template raster:")
+  print(extent(templateRaster))
   
   rasterList <- dlply(.data=xyzt, .variables=variables, .fun=function(xyz, templateRaster, transform, inverseTransform) {
     xyz <- xyz[complete.cases(xyz),]
